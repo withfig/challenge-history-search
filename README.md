@@ -1,6 +1,6 @@
 ### Building `fzf` style history search with Fig
 
-![](README.assets/fzf.png)
+![](fzf.png)
 
 ##### Overview
 
