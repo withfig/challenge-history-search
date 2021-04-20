@@ -1,6 +1,6 @@
 ### Building `fzf` style history search with Fig
 
-![](README.assets/Screen Shot 2021-04-19 at 1.40.13 PM.png)
+![](README.assets/fzf.png)
 
 ##### Overview
 
