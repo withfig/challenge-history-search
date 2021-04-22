@@ -4,7 +4,7 @@
 
 ##### Overview
 
-An often overlooked terminal shortcut is *history search*. Pressing `control`+`r`, let's you quickly search over all of your previously used terminal commands. We would like you to implement this history search functionality but as a Fig app.
+An often overlooked terminal shortcut is *history search*. Pressing `control`+`r`, let's you quickly search over all of your previously used terminal commands. We would like you to implement this history search functionality, similar to how it is done in [fzf](https://github.com/junegunn/fzf), but as a Fig app.
 
 
 
@@ -27,6 +27,7 @@ An often overlooked terminal shortcut is *history search*. Pressing `control`+`r
 
 1. Implement fuzzy searching
 2. Highlight fuzzy search matches
+3. Implement virtualized scrolling (this should make the app much more performant)
 
 ----
 
@@ -34,10 +35,9 @@ An often overlooked terminal shortcut is *history search*. Pressing `control`+`r
 
 ##### Barebones Setup
 
-1. Run `python3 -m http.server 3000` in the root project folder
+1. Run `python3 -m http.server 3000` in the root project folder 
 
 2. Switch to development build using  `fig util:build dev`
-
    
 
 * When using a `dev` build, the Fig app will load a file from `localhost:3000/autocomplete/v6` in the popup window.
@@ -56,6 +56,8 @@ An often overlooked terminal shortcut is *history search*. Pressing `control`+`r
 - You can right click on the popup window to force it to reload and open the web inspector.
 
 - If you want to force the popup window to appear (for instance, so that you can click on it to show the JS console), go to the Fig menubar icon  > Settings > Developer and then toggle "Debug Mode" on.
+
+- If the some of the parameters in the fig.autocomplete hook are coming out as null, you need to run `fig source` in the terminal you are testing your app in
 
 ---
 
@@ -87,10 +89,17 @@ fig.init = () => {
 ###### Getting the Edit Buffer
 
 ```
-fig.autocomplete = (buffer, cursorIndex) => {
+fig.autocomplete = (buffer, cursorIndex, windowID, tty, cwd, processUserIsIn) => { 
 
 }
 ```
+* buffer: what the user has typed on a given line
+* cursorIndex: index of cursor in the line
+* windowID: the macOS window ID of the terminal emulator (you won't need)
+* tty: the tty of the terminal the user is in (you won't need)
+* processUserIsIn: whether the user is in `bash`, `zsh`, `fish` etc. Note, it could also be something like `/bin/bash` or `-zsh`
+
+
 
 
 
@@ -104,11 +113,14 @@ While the Fig popup window is visible, it will intercept certain keystrokes.
 - Up arrow (`126`)
 - Down arrow (`125`)
 
+**Note**: Fig will only send events for the keystrokes above, not every key stroke
+
 ```
 fig.keypress = (appleKeyCode) => {
 
 }
 ```
+
 
 ###### Writing Files
 
