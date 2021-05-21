@@ -4,7 +4,7 @@
 
 ##### Overview
 
-An often overlooked terminal shortcut is *history search*. Pressing `control`+`r`, let's you quickly search over all of your previously used terminal commands. We would like you to implement this history search functionality, similar to how it is done in [fzf](https://github.com/junegunn/fzf), but as a Fig app.
+An often overlooked terminal shortcut is *history search*. Pressing `control`+`r`, lets you quickly search over all of your previously used terminal commands. We would like you to implement this history search functionality, similar to how it is done in [fzf](https://github.com/junegunn/fzf), but as a Fig app.
 
 
 
@@ -12,69 +12,95 @@ An often overlooked terminal shortcut is *history search*. Pressing `control`+`r
 
 | Framework | Language   |
 | --------- | ---------- |
-| Vue2      | Typescript |
+| Vue       | Typescript |
 
 
 
 ##### Goals:
 
-1. Create a standard  Vue/TS development environment, with transpilation, module bundling, linting, etc 
-2. Load command history, accounting for different shells (`bash`, `zsh`, `fish`), terminals, and history saving formats
-3. Update list of commands to include new commands run by the user
+1. Load command history, accounting for different shells (`bash`, `zsh`, `fish`) and history saving formats
+   - Start with `zsh` and `fish` and then check in!
+2. Update list of commands to include new commands run by the user
+3. Handle switching between shells. For instance, if I am in a `zsh` process and then run `exec fish` the app should now search over my `fish` history.
 4. Display and filter a list of suggestions based on what the user has typed
+5. Implement substring/fuzzy searching and highlight matches
 
-##### Stretch goals:
+**Stretch Goals:**
 
-1. Implement fuzzy searching
-2. Highlight fuzzy search matches
-3. Implement virtualized scrolling (this should make the app much more performant)
+- Implement virtualized scrolling to improve performance (optional)
+
+
+
+##### Assessment:
+
+1. <u>Code Quality</u>: We are looking for clean, modular code that follows Vue best practices.
+2. <u>Robustness</u>: We'll be evaluating how well your parsing logic handles various history formats and shell configurations. You don't need to support everything, but do the research into the different permutations and be explicit about what you support and what you've decided is out of scope.  (If you are ever on the fence, ask us!)
+3. <u>Product Experience</u>: Build something that you would want to use yourself. Leave time to polish the UI.
 
 ----
 
 
 
+### Implementation
+
+> If you run into roadblocks, odds are this is our fault! 😅 You'll be using internal APIs that often were introduced with a very specific purpose in mind and may have strange quirks or edge cases. 
+>
+> **If you get stuck, *please* ask questions rather than trying to puzzle your way through Fig specific issues!**
+
 ##### Barebones Setup
 
-1. Run `python3 -m http.server 3000` in the root project folder 
-
+1. Run `yarn install` to pull dependencies
 2. Switch to development build using  `fig util:build dev`
-   
+3. Run `yarn run serve` to recompile and hot reload.
 
-* When using a `dev` build, the Fig app will load a file from `localhost:3000/autocomplete/v6` in the popup window.
 
-* You can switch builds by running `fig util:build <BUILD>`
-  * To switch to `dev`, run `fig util:build dev`. To switch back to `prod`, run `fig util:build prod`
 
-* We've included a very barebones starter (`./autocomplete/v6/index.html`), so you can get a sense for the Fig APIs and sanity check that everything is working. 
+> **Notes**
+>
+> * When using a `dev` build, the Fig app will load a file from `localhost:3000/autocomplete/v6` in the popup window. This setup is handled by the boilerplate.
+>
+>   
+>
+> * You can switch builds by running `fig util:build <BUILD>`
+>
+>   * To switch to `dev`, run `fig util:build dev`. To switch back to `prod`, run `fig util:build prod`
 
-==You should set up a more standard Vue/TS development environment, with transpilation, module bundling, linting, etc.==
+
 
 ##### Debugging Tips
 
-- You can press `escape` at anytime to hide the popup window. This is helpful if you need to run a command in the terminal.
-
-- You can right click on the popup window to force it to reload and open the web inspector.
+- **You can right click on the popup window to force it to reload and open the web inspector.**
 
 - If you want to force the popup window to appear (for instance, so that you can click on it to show the JS console), go to the Fig menubar icon  > Settings > Developer and then toggle "Debug Mode" on.
 
-- If the some of the parameters in the fig.autocomplete hook are coming out as null, you need to run `fig source` in the terminal you are testing your app in
+  > You can also run `fig settings developer.debugMode true` 
+
+- You can press `escape` at anytime to hide the popup window. This is helpful if you need to run a command in the terminal.
+
+- I would suggest disabling Fig in VS Code, while you are working on this challenge. You can then use the integrated terminal as your real terminal and Terminal.app or iTerm as your test environment. 
+
+  (Currently, VSCode is the only terminal where Fig can be disabled.)
+
+  `fig settings integrations.vscode.disabled true`
+
+- If the some of the parameters — like `currentProcess` —  in the `fig.autocomplete` hook are coming out as `null`,  this means the Fig app has not linked the window to a shell session yet. You can fix this by running `fig source` in the terminal you are testing your app in.
+
+- Once you're comfortable with Fig development (eg. setting window height and understanding how to debug), you could experiment with `fig settings autocomplete.onlyShowOnTab true`. **Turning this setting on will cause the Fig window to remain hidden until the user opts in by pressing tab.** 
+
+  This interaction model more appropriate behavior for history search than the current default which is optimized for autocomplete.
 
 ---
 
 
 
-##### Relevant APIs
-
-See `./autocomplete/v6/index.html` for sample implementation.
-
-
+### Relevant APIs
 
 ###### Initialization
 
 Running fig.js commands before `fig.init` has been called results in undefined behavior. You should overwrite `fig.init` with your own function, that serves as the entry point for application logic.
 
 ```
-fig.init = () => {
+window.fig.init = () => {
   console.log("fig.js has loaded and you can run fig commands")
   
   // you might initialize the pty here as well
@@ -88,8 +114,10 @@ fig.init = () => {
 
 ###### Getting the Edit Buffer
 
+This function is called on every keystroke 
+
 ```
-fig.autocomplete = (buffer, cursorIndex, windowID, tty, cwd, processUserIsIn) => { 
+window.fig.autocomplete = (buffer, cursorIndex, windowID, tty, currentDirectory, currentProcess) => { 
 
 }
 ```
@@ -97,7 +125,8 @@ fig.autocomplete = (buffer, cursorIndex, windowID, tty, cwd, processUserIsIn) =>
 * cursorIndex: index of cursor in the line
 * windowID: the macOS window ID of the terminal emulator (you won't need)
 * tty: the tty of the terminal the user is in (you won't need)
-* processUserIsIn: whether the user is in `bash`, `zsh`, `fish` etc. Note, it could also be something like `/bin/bash` or `-zsh`
+* currentDirectory: the user's current working directory
+* currentProcess: the full path of the currently running executable. Use this to determine whether the user is in `bash`, `zsh`, `fish` etc. Note, it could also be something like `/bin/bash` or `-zsh`
 
 
 
@@ -105,8 +134,7 @@ fig.autocomplete = (buffer, cursorIndex, windowID, tty, cwd, processUserIsIn) =>
 
 ###### Intercepting Keystrokes
 
-
-While the Fig popup window is visible, it will intercept certain keystrokes.
+*While the Fig popup window is visible*, it will intercept certain keystrokes.
 
 - Enter  (`36`)
 - Tab (`48`)
@@ -116,7 +144,7 @@ While the Fig popup window is visible, it will intercept certain keystrokes.
 **Note**: Fig will only send events for the keystrokes above, not every key stroke
 
 ```
-fig.keypress = (appleKeyCode) => {
+window.fig.keypress = (appleKeyCode) => {
 
 }
 ```
@@ -146,10 +174,42 @@ await ptyexecute("git")
 
 This will execute the command in a background pseudo terminal. It is an async wrapper over `fig.pty.execute`.
 
+> **Note:** The psuedo terminal is not guaranteed to have the same environment variables as the user's current shell.
+
+###### Inserting Text
+
+```
+window.fig.insert("Hello there!")
+```
+
+This will insert text into the terminal on behalf of the user.
+
+You can include special characters in the text.
+
+- `\b` will delete a character. It is equivalent to pressing the backspace key.
+- `\n` will execute whatever text is in the terminal. It is equivalent to pressing the enter key.
+
+You can chain these special characters together.
+
+```
+window.fig.insert("\b\b\bpwd\n")
+```
+
+This would delete 3 characters from the terminal, insert then string `pwd` and then execute it.
+
+> **Note:** Since you know the current edit buffer in the terminal from the `fig.autocomplete` hook, you can delete an entire line by taking the number of characters in the terminal and then inserting an equal number of `\b` characters.
+
+
+
 ###### Setting the Window Height
 
 ```
-fig.maxheight = `${100}`
+setWindowHeight(100)
 ```
 
-> Note that the value assigned to `maxheight` must be a **string**.
+
+
+###### Accessing Fig icons
+
+See "[Fig Icon API](https://fig.io/docs/autocomplete/reference/icon-api)" for more details.
+
