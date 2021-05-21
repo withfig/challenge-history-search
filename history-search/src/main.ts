@@ -46,7 +46,7 @@ const vm = new Vue({
         // Setting the window hieght to zero will hide the popup
         await setWindowHeight(0)
       } else {
-        await setWindowHeight(200)
+        await setWindowHeight(140)
       }
       console.groupEnd()
 

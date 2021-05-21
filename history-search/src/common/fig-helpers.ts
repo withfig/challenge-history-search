@@ -46,6 +46,15 @@ export const setWindowHeight = (height: number): Promise<void> => {
             console.warn("Debug Mode can be disabled by running `fig settings developer.debugMode false`")
         }
 
+        let maxHeight = window.fig.settings["autocomplete.height"] || 140
+
+        if (height > maxHeight) {
+            console.warn(`Attempting to set height to ${height} which is greater than the user-defined max height of ${maxHeight}. `)
+            console.warn('You can update the max height by running `fig settings autocomplete.height <number>`')
+
+            height = maxHeight
+        }
+
         window.fig.private({ type: "setAutocompleteHeight", data: { "height": `${height}` } }, () => {
             resolve()
         })

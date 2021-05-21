@@ -2,13 +2,13 @@
 
 ![](fzf.png)
 
-##### Overview
+### Overview
 
 An often overlooked terminal shortcut is *history search*. Pressing `control`+`r`, lets you quickly search over all of your previously used terminal commands. We would like you to implement this history search functionality, similar to how it is done in [fzf](https://github.com/junegunn/fzf), but as a Fig app.
 
 
 
-##### Stack:
+### Stack:
 
 | Framework | Language   |
 | --------- | ---------- |
@@ -16,7 +16,7 @@ An often overlooked terminal shortcut is *history search*. Pressing `control`+`r
 
 
 
-##### Goals:
+### Goals:
 
 1. Load command history, accounting for different shells (`bash`, `zsh`, `fish`) and history saving formats
    - Start with `zsh` and `fish` and then check in!
@@ -31,11 +31,11 @@ An often overlooked terminal shortcut is *history search*. Pressing `control`+`r
 
 
 
-##### Assessment:
+### Assessment:
 
-1. <u>Code Quality</u>: We are looking for clean, modular code that follows Vue best practices.
-2. <u>Robustness</u>: We'll be evaluating how well your parsing logic handles various history formats and shell configurations. You don't need to support everything, but do the research into the different permutations and be explicit about what you support and what you've decided is out of scope.  (If you are ever on the fence, ask us!)
-3. <u>Product Experience</u>: Build something that you would want to use yourself. Leave time to polish the UI.
+1. **Code Quality**: We are looking for clean, modular code that follows Vue best practices.
+2. **Robustness**: We'll be evaluating how well your parsing logic handles various history formats and shell configurations. You don't need to support everything, but do the research into the different permutations and be explicit about what you support and what you've decided is out of scope.  (If you are ever on the fence, ask us!)
+3. **Product Experience**: Build something that you would want to use yourself. Leave time to polish the UI.
 
 ----
 
@@ -47,7 +47,7 @@ An often overlooked terminal shortcut is *history search*. Pressing `control`+`r
 >
 > **If you get stuck, *please* ask questions rather than trying to puzzle your way through Fig specific issues!**
 
-##### Barebones Setup
+#### Barebones Setup
 
 1. Run `yarn install` to pull dependencies
 2. Switch to development build using  `fig util:build dev`
@@ -67,7 +67,7 @@ An often overlooked terminal shortcut is *history search*. Pressing `control`+`r
 
 
 
-##### Debugging Tips
+#### Debugging Tips
 
 - **You can right click on the popup window to force it to reload and open the web inspector.**
 
@@ -95,7 +95,7 @@ An often overlooked terminal shortcut is *history search*. Pressing `control`+`r
 
 ### Relevant APIs
 
-###### Initialization
+#### Initialization
 
 Running fig.js commands before `fig.init` has been called results in undefined behavior. You should overwrite `fig.init` with your own function, that serves as the entry point for application logic.
 
@@ -112,7 +112,7 @@ window.fig.init = () => {
 
 
 
-###### Getting the Edit Buffer
+#### Getting the Edit Buffer
 
 This function is called on every keystroke 
 
@@ -132,7 +132,7 @@ window.fig.autocomplete = (buffer, cursorIndex, windowID, tty, currentDirectory,
 
 
 
-###### Intercepting Keystrokes
+#### Intercepting Keystrokes
 
 *While the Fig popup window is visible*, it will intercept certain keystrokes.
 
@@ -150,7 +150,7 @@ window.fig.keypress = (appleKeyCode) => {
 ```
 
 
-###### Writing Files
+#### Writing Files
 
 ```
 await fwrite("~/path/to/file")
@@ -158,7 +158,7 @@ await fwrite("~/path/to/file")
 
  This will write the file at `~/path/to/file` or throw an error. It is an async wrapper over `fig.fwrite`.
 
-###### Reading Files
+#### Reading Files
 
 ```
 await fread("~/path/to/file")
@@ -176,7 +176,7 @@ This will execute the command in a background pseudo terminal. It is an async wr
 
 > **Note:** The psuedo terminal is not guaranteed to have the same environment variables as the user's current shell.
 
-###### Inserting Text
+#### Inserting Text
 
 ```
 window.fig.insert("Hello there!")
@@ -201,7 +201,7 @@ This would delete 3 characters from the terminal, insert then string `pwd` and t
 
 
 
-###### Setting the Window Height
+#### Setting the Window Height
 
 ```
 setWindowHeight(100)
@@ -209,7 +209,7 @@ setWindowHeight(100)
 
 
 
-###### Accessing Fig icons
+#### Accessing Fig icons
 
 See "[Fig Icon API](https://fig.io/docs/autocomplete/reference/icon-api)" for more details.
 

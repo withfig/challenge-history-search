@@ -1,7 +1,6 @@
 <template>
   <div id="app">
     <p>Hello there!</p>
-    {{ debugInfo }}
   </div>
 </template>
 
