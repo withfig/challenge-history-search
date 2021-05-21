@@ -208,8 +208,13 @@ setWindowHeight(100)
 ```
 
 
-
 #### Accessing Fig icons
 
 See "[Fig Icon API](https://fig.io/docs/autocomplete/reference/icon-api)" for more details.
+
+#### Accessing Fig Settings
+
+You can access any setting value with `fig.settings["key"]`. View "[Settings](https://fig.io/docs/settings)" for a list all key values.
+
+Accessing the user's default shell might by useful. It can be done with `fig.settings["userShell"]`.
 
