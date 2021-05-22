@@ -46,7 +46,7 @@ Don't worry about this until you've finished everything the above.
 
 
 
-![example](README.assets/Screen Shot 2021-05-21 at 5.07.18 PM.png)
+![example](example.png)
 
 This is an example of what the final produce might look like.
 
