@@ -48,7 +48,7 @@ Don't worry about this until you've finished everything the above.
 
 ![example](example.png)
 
-This is an example of what the final produce might look like.
+<center>This is an example of what the final product might look like.</center>
 
 ### Assessment:
 
