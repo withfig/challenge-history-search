@@ -26,7 +26,7 @@ An often overlooked terminal shortcut is *history search*. Pressing `control`+`r
 
    > The list of commands should be updated to include any new commands run by the user.
    >
-   > You should not rely on the `fig.autocomplete` hook, instead read and parse the appropriate history file (eg. `~/.zsh_history` or `~/.local/share/fish/fish_history`) directly. 
+   > You should not rely on the `fig.autocomplete` hook for getting the newest commands, instead reload and parse the appropriate history file (eg. `~/.zsh_history` or `~/.local/share/fish/fish_history`) directly. 
 
 3. Handle switching between shells. 
 
@@ -48,7 +48,7 @@ Don't worry about this until you've finished everything the above.
 
 ![example](example.png)
 
-<center>This is an example of what the final product might look like.</center>
+<center>This is an example of how the final product might look.</center>
 
 ### Assessment:
 
@@ -96,17 +96,17 @@ Don't worry about this until you've finished everything the above.
 
 - You can press `escape` at anytime to hide the popup window. This is helpful if you need to run a command in the terminal.
 
-- I would suggest disabling Fig in VS Code, while you are working on this challenge. You can then use the integrated terminal as your real terminal and Terminal.app or iTerm as your test environment. 
+- I would suggest disabling Fig in VS Code while you are working on this challenge. You can then use the integrated terminal as your 'real' terminal and Terminal.app or iTerm as your test environment. 
 
   (Currently, VSCode is the only terminal where Fig can be disabled.)
 
   `fig settings integrations.vscode.disabled true`
 
-- If the some of the parameters — like `currentProcess` —  in the `fig.autocomplete` hook are coming out as `null`,  this means the Fig app has not linked the window to a shell session yet. You can fix this by running `fig source` in the terminal you are testing your app in.
+- If some of the parameters — like `currentProcess` —  in the `fig.autocomplete` hook are coming out as `null`,  this means the Fig app has not linked the window to a shell session yet. You can fix this by running `fig source` in the terminal you are testing your app in.
 
 - Once you're comfortable with Fig development (eg. setting window height and understanding how to debug), you could experiment with `fig settings autocomplete.onlyShowOnTab true`. **Turning this setting on will cause the Fig window to remain hidden until the user opts in by pressing tab.** 
 
-  This interaction model more appropriate behavior for history search than the current default which is optimized for autocomplete.
+  This interaction model is more appropriate for history search than the current default, which is optimized for autocomplete.
 
 ---
 
@@ -193,7 +193,7 @@ await ptyexecute("git")
 
 This will execute the command in a background pseudo terminal. It is an async wrapper over `fig.pty.execute`.
 
-> **Note:** The psuedo terminal is not guaranteed to have the same environment variables as the user's current shell.
+> **Note:** The psuedo terminal will not have the same environment variables as the user's current shell.
 
 #### Inserting Text
 
