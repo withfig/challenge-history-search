@@ -1,10 +1,24 @@
 ### Building `fzf` style history search with Fig
 
-![](fzf.png)
+
+![example](example.png)
+
+<!-- 
+
+<table>
+   <tr>
+      <td> <img src="fzf.png" width="100px" heihgt="100px" /> </td>
+      <td> <img src="example.png"> </td>
+   </tr>
+</table>
+   
+-->
+
 
 ### Overview
 
-An often overlooked terminal shortcut is *history search*. Pressing `control`+`r`, lets you quickly search over all of your previously used terminal commands. We would like you to implement this history search functionality, similar to how it is done in [fzf](https://github.com/junegunn/fzf), but as a Fig app.
+We would like you to build an app very similar to Fig's current autocomplete. However, rather than giving CLI specific suggestions (what it currently does), we would like you to search over a user's previously used terminal commands. The functionality should be similar to ctrl+r in [fzf](https://github.com/junegunn/fzf), however, should entirely be contained in a Fig app.
+
 
 
 
@@ -46,7 +60,7 @@ Don't worry about this until you've finished everything the above.
 
 
 
-![example](example.png)
+
 
 This is an example of how the final product might look. Use the existing autocomplete app as reference where applicable  (eg. each suggestion should be the same height, horizontal scrolling, behavior when the are more suggestions than can be displayed on one screen.)
 
