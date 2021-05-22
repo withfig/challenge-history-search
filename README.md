@@ -18,24 +18,43 @@ An often overlooked terminal shortcut is *history search*. Pressing `control`+`r
 
 ### Goals:
 
-1. Load command history, accounting for different shells (`bash`, `zsh`, `fish`) and history saving formats
-   - Start with `zsh` and `fish` and then check in!
-2. Update list of commands to include new commands run by the user
-3. Handle switching between shells. For instance, if I am in a `zsh` process and then run `exec fish` the app should now search over my `fish` history.
-4. Display and filter a list of suggestions based on what the user has typed
+1. Load command history from disk, accounting for different shells ( `zsh`, `fish`) and history saving formats.
+
+   > Account for the differences in the way the shells save things to the history file (e.g. zsh can sometimes append timestamps...)
+
+2. Live reload history file on every new line.
+
+   > The list of commands should be updated to include any new commands run by the user.
+   >
+   > You should not rely on the `fig.autocomplete` hook, instead read and parse the appropriate history file (eg. `~/.zsh_history` or `~/.local/share/fish/fish_history`) directly. 
+
+3. Handle switching between shells. 
+
+   > For instance, if I am in a `zsh` process and then run `exec fish` the app should switch to searching over my `fish` history.
+
+4. Display and filter a list of suggestions based on what the user has typed. Insert the selected command when the user pressed enter.
+
 5. Implement substring/fuzzy searching and highlight matches
 
 **Stretch Goals:**
+
+Don't worry about this until you've finished everything the above.
+
+-  Parse `bash` history file
 
 - Implement virtualized scrolling to improve performance (optional)
 
 
 
+![example](README.assets/Screen Shot 2021-05-21 at 5.07.18 PM.png)
+
+This is an example of what the final produce might look like.
+
 ### Assessment:
 
 1. **Code Quality**: We are looking for clean, modular code that follows Vue best practices.
 2. **Robustness**: We'll be evaluating how well your parsing logic handles various history formats and shell configurations. You don't need to support everything, but do the research into the different permutations and be explicit about what you support and what you've decided is out of scope.  (If you are ever on the fence, ask us!)
-3. **Product Experience**: Build something that you would want to use yourself. Leave time to polish the UI.
+3. **Product Experience**: Build something that you would want to use yourself. Leave time to polish the interface and make the interaction *feel* good. You can use Fig's existing autocomplete product as a guide.
 
 ----
 
@@ -214,7 +233,10 @@ See "[Fig Icon API](https://fig.io/docs/autocomplete/reference/icon-api)" for mo
 
 #### Accessing Fig Settings
 
-You can access any setting value with `fig.settings["key"]`. View "[Settings](https://fig.io/docs/settings)" for a list all key values.
+You can access any setting value with `fig.settings["key"]`. 
 
-Accessing the user's default shell might by useful. It can be done with `fig.settings["userShell"]`.
+- View [Settings](https://fig.io/docs/settings) for a list all key values
+- Run `fig settings` to see all settings that are currently enabled.
+
+You can access the user's default shell by running `fig.settings["userShell"]`.
 
