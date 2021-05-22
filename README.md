@@ -48,7 +48,7 @@ Don't worry about this until you've finished everything the above.
 
 ![example](example.png)
 
-<center>This is an example of how the final product might look.</center>
+This is an example of how the final product might look. Use the existing autocomplete app as reference where applicable  (eg. each suggestion should be the same height, horizontal scrolling, behavior when the are more suggestions than can be displayed on one screen.)
 
 ### Assessment:
 
